@@ -4,11 +4,18 @@ This is a basic search engine implemented in React.js and Node.js. The setup pro
 
 1. Install all the packages 
     #### `npm install`
-
-2. run the backend
+2. Copy and paste paper documents into Academic_paper folder
+3. Index the documents
+    #### `node background/indexPaper.js`
+    ```
+    8541 items parsed from data file
+    Successfully indexed 8541 out of 8541 items
+    ```
+    #### `node background/indicesPaper.js`
+4. Run the backend
     #### `node app.js`
     ```console
     server running @50000
     ```
-3. run the frontend client
+5. Run the frontend client
     #### `yarn start`

@@ -1,40 +1,57 @@
 var express = require('express');
 var router = express.Router();
 const elasticsearch = require('elasticsearch');
+const INDEX_NAME = "newcs510preprojdata";
 
 const esClient = new elasticsearch.Client({
     host: '127.0.0.1:9200',
     log: 'error'
-  });
+});
+
+const search = function search(index, body) {
+    return esClient.search({index: index, body: body});
+};
 
 router.post('/', function(req, res, next) {
-    query = req.body.query
-    // The port of the search engine running in the background   
-    search_engine_port = 26000;
-    // TO_DO : implement a function which can retrieve the infomation that we need
+    let body = {
+        size: 20,
+        from: 0,
+        query: {
+            match: {
+                title: {
+                    query: req.body.query,
+                    minimum_should_match: 1,
+                    fuzziness: 2
+                }
+            }
+        }
+    };
 
-    // results = sei.search(query)
-    titles = []
-    abstracts = []
-    urls = []
-    ids = []
-    // docs_content = sei.search_engine.getContent(results)
-    // for(single_dict in docs_content) {
-    //     abstracts += [sei.boldface_query(single_dict['abstract'], query)]
-    //     titles += [single_dict['title']]
-    //     urls += [sei.get_pdf_url(single_dict['paper_id'])]
-    //     ids += ['paperid' + str(single_dict['paper_id'].encode('utf-8')).replace(" ", "")]
-    // }
+    console.log(`retrieving documents whose title matches '${body.query.match.title.query}'...`);
+    search(INDEX_NAME, body)
+        .then(results => {
+            console.log(`found ${results.hits.total} items in ${results.took}ms`);
 
-    // example
-    titles.push("One");
-    abstracts.push("One");
-    urls.push("www.google.com");
-    ids.push("One");
-       
-    return_result = [{'titles': titles, 'abstracts': abstracts, 'urls': urls, 'ids': ids}]
-    
+            if (results.hits.total > 0) {
+                console.log(`returned article titles:`);
+            }
 
-    res.json(return_result);
-})
+            let return_result = [];
+            results.hits.hits.forEach((hit) => {
+                let return_result_item = {
+                    titles: hit._source.title,
+                    abstracts: hit._source.paperAbstract,
+                    ids: hit._source.id
+                };
+                return_result.push(return_result_item);
+            });
+
+            console.log(return_result);
+            return res.json(return_result);
+        })
+        .catch(
+            console.error
+        );
+});
+
 module.exports = router;
