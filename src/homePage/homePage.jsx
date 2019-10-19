@@ -25,7 +25,14 @@ class homePage extends React.Component {
         title: 'Abstracts',
         dataIndex: 'abstracts',
         key: 'abstracts',
-    }],
+    },
+    {
+        title: 'Relevance',
+        dataIndex: 'relevance',
+        key: 'relevance',
+
+    }
+    ],
       dataSource : []
     };
     this.handleChange = this.handleChange.bind(this);
@@ -60,7 +67,9 @@ class homePage extends React.Component {
           var cur = 1;
           for(let paper of response) {
             paper.number = cur;
+            paper.relevance = 0;
             global.constants.usersElements.push(paper);
+            console.log('paper: ',paper);
             cur ++ ;
           }
           this.setState({dataSource:global.constants.usersElements});
