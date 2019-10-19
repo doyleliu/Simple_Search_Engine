@@ -42,6 +42,7 @@ router.post('/', function(req, res) {
                     titles: hit._source.title,
                     abstracts: hit._source.paperAbstract,
                     ids: hit._source.id,
+                    query:req.body.query,
                 };
                 return_result.push(return_result_item);
             });

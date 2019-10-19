@@ -31,7 +31,18 @@ class homePage extends React.Component {
         dataIndex: 'relevance',
         key: 'relevance',
 
-    }
+    },
+    {
+        title: 'RelevanceButton',
+        dataIndex: 'relevanceButton',
+        key: 'relevanceButton',
+
+    },
+    {
+        title: 'IrrelevanceButton',
+        dataIndex: 'irrelevanceButton',
+        key: 'irrelevanceButton',
+    },
     ],
       dataSource : []
     };
@@ -67,7 +78,13 @@ class homePage extends React.Component {
           var cur = 1;
           for(let paper of response) {
             paper.number = cur;
-            paper.relevance = 0;
+            paper.relevance=0;//database
+          var currData = {
+              query : this.state.query,
+              document_title: paper.titles,
+          }
+            paper.relevanceButton = <button onClick={this.changeRelevance(currData)}>Relevant</button>;
+            paper.irrelevanceButton = <button onClick={this.changeIrelevance(paper.relevance)}>Irrelevant</button>;
             global.constants.usersElements.push(paper);
             console.log('paper: ',paper);
             cur ++ ;
@@ -114,6 +131,47 @@ class homePage extends React.Component {
 
     
   )}
+
+  changeRelevance(currData){
+      var data = {
+          query : currData.query,
+          document_title: currData.document_title,
+          relevance: 1,
+      }
+      fetch(`/backend/queryDocRel`, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers:{
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials':true,
+              'Access-Control-Allow-Methods':'POST, GET',
+              "Content-Type": "application/json"
+          }
+      }).then(res => res.json())
+          .then(response => {
+              if(response.Status == "False"){
+                  alert("Invalid!");
+              }
+              else{
+                  // var cur = 1;
+                  // for(let paper of response) {
+                  //     paper.number = cur;
+                  //     paper.relevance=0;//database
+                  //     paper.relevanceButton = <button onClick={this.changeRelevance(paper.relevance)}>Relevant</button>;
+                  //     paper.irrelevanceButton = <button onClick={this.changeIrelevance(paper.relevance)}>Irrelevant</button>;
+                  //     global.constants.usersElements.push(paper);
+                  //     console.log('paper: ',paper);
+                  //     cur ++ ;
+                  // }
+                  // this.setState({dataSource:global.constants.usersElements});
+                  console.log('posted to sql')
+              }
+          })
+          .catch(error=> console.log('Error:', error))
+  }
+  changeIrelevance(relValue){
+
+  }
 
 }
 
