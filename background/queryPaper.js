@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const elasticsearch = require('elasticsearch');
 const INDEX_NAME = "newcs510preprojdata";
 
@@ -12,7 +12,7 @@ const search = function search(index, body) {
     return esClient.search({index: index, body: body});
 };
 
-router.post('/', function(req, res, next) {
+router.post('/', function(req, res) {
     let body = {
         size: 20,
         from: 0,
@@ -21,7 +21,7 @@ router.post('/', function(req, res, next) {
                 title: {
                     query: req.body.query,
                     minimum_should_match: 1,
-                    fuzziness: 2
+                    fuzziness: 1
                 }
             }
         }
@@ -46,7 +46,6 @@ router.post('/', function(req, res, next) {
                 return_result.push(return_result_item);
             });
 
-            console.log(return_result);
             return res.json(return_result);
         })
         .catch(
