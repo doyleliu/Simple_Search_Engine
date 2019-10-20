@@ -17,17 +17,14 @@ router.post('/', function(req, res) {
         size: 20,
         from: 0,
         query: {
-            match: {
-                title: {
-                    query: req.body.query,
-                    minimum_should_match: 1,
-                    fuzziness: 1
-                }
+            multi_match: {
+                query: req.body.query,
+                fields: ["title", "paperAbstract"]
             }
         }
     };
 
-    console.log(`retrieving documents whose title matches '${body.query.match.title.query}'...`);
+    console.log(`retrieving documents whose title/abstract matches '${req.body.query}'...`);
     search(INDEX_NAME, body)
         .then(results => {
             console.log(`found ${results.hits.total} items in ${results.took}ms`);
