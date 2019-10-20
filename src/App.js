@@ -10,7 +10,7 @@ class App extends React.Component {
     return (
       <div className="jumbotron">
         <div className="container">
-          <div className="col-sm-8 col-sm-offset-2">
+          <div className="col-sm-offset-2">
             <Switch>
               <React.Fragment>
               <Route exact path="/" component={ homePage } />
