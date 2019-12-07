@@ -1,12 +1,16 @@
-const fs = require('fs');
+const fileQueue = require('filequeue');
 const elasticsearch = require('elasticsearch');
 const INDEX_NAME = "newcs510preprojdata";
 const TYPE = "article";
+
+const fq = new fileQueue(200);
 
 const esClient = new elasticsearch.Client({
     host: 'localhost:9200',
     log: 'error'
 });
+
+let articles = [];
 
 const bulkIndex = function bulkIndex(index, type, data) {
     let bulkBody = [];
@@ -39,36 +43,37 @@ const bulkIndex = function bulkIndex(index, type, data) {
 // only for testing purposes
 // all calls should be initiated through the module
 const test = function test() {
-    let articles = [];
+    let ROOT_DIR = "./Data/grobid_processed/";
+    let toParse = ['title', 'abstract', 'introduction'];
 
-    fs.readFile('Academic_papers/docs.json', 'utf8', (err, res) => {
-        if (err) {
-            console.log("File read failed:", err);
-            return
+    fq.readdir(ROOT_DIR, function(err, files) {
+        if(err) {
+            throw err;
         }
-        // console.log('File data:', res);
-        let lines = res.split('\n');
-        for(let line = 0; line < lines.length; line++){
-            if (lines[line]) {
-                let jsonRes = JSON.parse(lines[line]);
-                let actualRes = {
-                    keyPhrases: jsonRes.keyPhrases,
-                    paperAbstract: jsonRes.paperAbstract ? jsonRes.paperAbstract[0] : undefined,
-                    numberKeyReferences: jsonRes.numberKeyReferences,
-                    title: jsonRes.title ? jsonRes.title[0] : undefined,
-                    venue: jsonRes.venue ? jsonRes.venue[0] : undefined,
-                    numCitedBy: jsonRes.numCitedBy ? jsonRes.numCitedBy[0]: undefined,
-                    numKeyCitations: jsonRes.numKeyCitations ? jsonRes.numKeyCitations[0] : undefined,
-                    docno: jsonRes.docno,
-                    id: line
-                };
-                articles.push(actualRes);
-            }
-        }
-        console.log(`${articles.length} items parsed from data file`);
-        bulkIndex(INDEX_NAME, TYPE, articles)
+        files.forEach(function(file) {
+            fq.readFile(ROOT_DIR + file, 'utf8', (err, res) => {
+                let articleRes = {};
+                if (err) {
+                    console.log("File read failed:", err);
+                } else {
+                    toParse.forEach(parseKey => {
+                        let re = new RegExp(`<${parseKey}>\n(.+)`);
+                        let item = re.exec(res);
+                        if (item) {
+                            articleRes[parseKey] = item[1];
+                        } else {
+                            articleRes[parseKey] = "";
+                        }
+                    });
+                    articles.push(articleRes);
+                    if (articles.length === 40376) {
+                        console.log(`${articles.length} items parsed from data file`);
+                        bulkIndex(INDEX_NAME, TYPE, articles)
+                    }
+                }
+            });
+        });
     });
-
 };
 
 test();
