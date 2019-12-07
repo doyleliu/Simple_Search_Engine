@@ -4,7 +4,7 @@ This is a basic search engine implemented in React.js and Node.js. The setup pro
 
 1. Install all the packages 
     #### `npm install`
-2. Copy and paste paper documents into Academic_paper folder
+2. Copy and paste paper documents (grobid_processed) into Data folder
 3. Index the documents
     #### `node background/indexPaper.js`
     ```
