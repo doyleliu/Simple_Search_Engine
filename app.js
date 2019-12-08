@@ -6,6 +6,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const queryPaperRouter = require('./background/queryPaper');
 const queryDocRelRouter = require('./background/queryDocRel');
+const recommendPaperRouter = require('./background/recommendPaper');
 const app = express();
 
 // view engine setup
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/backend/queryPaper', queryPaperRouter);
 app.use('/backend/queryDocRel', queryDocRelRouter);
+app.use('/backend/recommendPaper', recommendPaperRouter)
 
 app.use(function(req, res, next) {
     next(createError(404));
