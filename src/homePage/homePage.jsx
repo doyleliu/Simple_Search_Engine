@@ -43,6 +43,11 @@ class homePage extends React.Component {
                     dataIndex: 'irrelevanceButton',
                     key: 'irrelevanceButton',
                 },
+                {
+                    title: 'MoreRelatedPaper',
+                    dataIndex: 'MoreRelatedPaper',
+                    key: 'MoreRelatedPaper',
+                }
             ],
             dataSource: []
         };
@@ -74,23 +79,53 @@ class homePage extends React.Component {
                 if (response.Status === "False") {
                     alert("Invalid!");
                 } else {
-                    let cur = 1;
+                    let cur = 0;
+                    let fetches = [];
                     for (let paper of response) {
                         paper.number = cur;
-                        paper.relevance = 0;
-                        let currData = {
-                            query: this.state.query,
-                            document_title: paper.titles,
-                        };
-                        paper.relevanceButton =
-                            <button onClick={e => this.changeRelevance(e, currData)}>Relevant</button>;
-                        paper.irrelevanceButton =
-                            <button onClick={e => this.changeIrrelevance(e, currData)}>Irrelevant</button>;
-                        global.constants.usersElements.push(paper);
                         cur++;
+                        fetches.push(fetch(`/backend/recommendPaper`, {
+                            method: 'POST',
+                            body: JSON.stringify(paper),
+                            headers: {
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Credentials': true,
+                                'Access-Control-Allow-Methods': 'POST, GET',
+                                "Content-Type": "application/json"
+                            }
+                        }).then(res => res.json())
+                        .then(response => {
+                            paper.relevance = 0;
+                            let currData = {
+                                query: this.state.query,
+                                document_title: paper.titles,
+                            };
+                            paper.relevanceButton =
+                                <button onClick={e => this.changeRelevance(e, currData)}>Relevant</button>;
+                            paper.irrelevanceButton =
+                                <button onClick={e => this.changeIrrelevance(e, currData)}>Irrelevant</button>;
+                            let moreRelatedPaper = [];
+                            let cnt = 1;
+                            for (let ob of response) {
+                                moreRelatedPaper.push(" " + cnt + ". " + ob.titles + " ;");
+                                cnt ++;
+                                if(cnt > 5) break;
+                            }
+                            paper.MoreRelatedPaper = moreRelatedPaper;
+                            global.constants.usersElements.push(paper);
+                        }))
+
+                        Promise.all(fetches.map(p => p.catch(e => e)))
+                        .then(results => console.log(results))
+                        .catch(e => console.log(e))
                     }
-                    this.setState({dataSource: global.constants.usersElements});
                 }
+            })
+            .then(response => {
+                setTimeout(function () {
+                    global.constants.usersElements.sort((a, b) => (a.number > b.number) ? 1 : -1)
+                    this.setState({dataSource: global.constants.usersElements});
+                }.bind(this), 300);
             })
             .catch(error => console.log('Error:', error))
     }
