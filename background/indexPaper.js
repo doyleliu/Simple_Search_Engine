@@ -50,9 +50,11 @@ const test = function test() {
         if(err) {
             throw err;
         }
-        files.forEach(function(file) {
+        files.forEach((file, index) => {
             fq.readFile(ROOT_DIR + file, 'utf8', (err, res) => {
-                let articleRes = {};
+                let articleRes = {
+                    id: index
+                };
                 if (err) {
                     console.log("File read failed:", err);
                 } else {

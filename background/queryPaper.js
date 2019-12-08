@@ -19,7 +19,7 @@ router.post('/', function(req, res) {
         query: {
             multi_match: {
                 query: req.body.query,
-                fields: ["title", "paperAbstract"]
+                fields: ["title", "abstract"]
             }
         }
     };
@@ -27,7 +27,7 @@ router.post('/', function(req, res) {
     console.log(`retrieving documents whose title/abstract matches '${req.body.query}'...`);
     search(INDEX_NAME, body)
         .then(results => {
-            console.log(`found ${results.hits.total} items in ${results.took}ms`);
+            console.log(`found ${results.hits.hits.length} items in ${results.took}ms`);
 
             if (results.hits.total > 0) {
                 console.log(`returned article titles:`);
@@ -37,13 +37,12 @@ router.post('/', function(req, res) {
             results.hits.hits.forEach((hit) => {
                 let return_result_item = {
                     titles: hit._source.title,
-                    abstracts: hit._source.paperAbstract,
-                    ids: hit._source.id,
+                    abstracts: hit._source.abstract,
+                    ids: hit._id,
                     query:req.body.query,
                 };
                 return_result.push(return_result_item);
             });
-
             return res.json(return_result);
         })
         .catch(
