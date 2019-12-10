@@ -42,7 +42,7 @@ router.post('/', function(req, res) {
             results.hits.hits.forEach((hit) => {
                 let return_result_item = {
                     titles: hit._source.title,
-                    abstracts: hit._source.paperAbstract,
+                    abstracts: hit._source.abstract,
                     ids: hit._source.id,
                     query:req.body.ids,
                 };

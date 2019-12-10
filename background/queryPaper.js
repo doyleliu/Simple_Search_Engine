@@ -38,11 +38,12 @@ router.post('/', function(req, res) {
                 let return_result_item = {
                     titles: hit._source.title,
                     abstracts: hit._source.abstract,
-                    ids: hit._id,
+                    ids: hit._source.fileName,
                     query:req.body.query,
                 };
                 return_result.push(return_result_item);
             });
+            console.log(return_result);
             return res.json(return_result);
         })
         .catch(
