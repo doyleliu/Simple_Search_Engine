@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const elasticsearch = require('elasticsearch');
 const INDEX_NAME = "newcs510preprojdata";
+const top10topcis = require('../Data/preprocessed/top10.json');
 
 const esClient = new elasticsearch.Client({
     host: '127.0.0.1:9200',
@@ -13,23 +14,25 @@ const search = function search(index, body) {
 };
 
 router.post('/', function(req, res) {
+    console.log(req.body);
+    let input_topics = req.body.topics;
+    let customized_papers = [];
     let body = {
+        size: 20,
+        from: 0,
         query: {
-            more_like_this : {
-                like : [
-                    {
-                        _index : INDEX_NAME,
-                        _id : req.body.ids
-                    }
-                ],
-                fields : ["title", "abstract"],
-                min_term_freq : 1,
-                max_query_terms : 12
+            multi_match: {
+                query: req.body.query,
+                fields: ["title", "abstract"]
             }
         }
     };
 
-    console.log(`retrieving documents similar to '${req.body.ids}'...`);
+    input_topics.forEach(topic => {
+       customized_papers = [...customized_papers, ...top10topcis[topic]]
+    });
+
+    console.log(`filtering out documents which are not among the selected top 10 topics ...`);
     search(INDEX_NAME, body)
         .then(results => {
             console.log(`found ${results.hits.hits.length} items in ${results.took}ms`);
@@ -43,12 +46,15 @@ router.post('/', function(req, res) {
                 let return_result_item = {
                     titles: hit._source.title,
                     abstracts: hit._source.abstract,
-                    ids: hit._source.id,
-                    query:req.body.ids,
+                    ids: hit._source.fileName,
+                    query:req.body.query,
                 };
-                return_result.push(return_result_item);
+                if (customized_papers.indexOf(return_result_item.ids) >= 0) {
+                    return_result.push(return_result_item);
+                } else {
+                    console.log(return_result_item.ids);
+                }
             });
-
             return res.json(return_result);
         })
         .catch(

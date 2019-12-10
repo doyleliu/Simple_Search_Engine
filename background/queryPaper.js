@@ -43,7 +43,6 @@ router.post('/', function(req, res) {
                 };
                 return_result.push(return_result_item);
             });
-            console.log(return_result);
             return res.json(return_result);
         })
         .catch(

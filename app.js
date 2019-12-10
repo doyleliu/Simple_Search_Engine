@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const queryPaperRouter = require('./background/queryPaper');
 const queryDocRelRouter = require('./background/queryDocRel');
 const recommendPaperRouter = require('./background/recommendPaper');
+const researchAreaCustomization = require("./background/researchAreaCustomization");
 const app = express();
 
 // view engine setup
@@ -26,7 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/backend/queryPaper', queryPaperRouter);
 app.use('/backend/queryDocRel', queryDocRelRouter);
-app.use('/backend/recommendPaper', recommendPaperRouter)
+app.use('/backend/recommendPaper', recommendPaperRouter);
+app.use('/backend/researchArea', researchAreaCustomization);
 
 app.use(function(req, res, next) {
     next(createError(404));

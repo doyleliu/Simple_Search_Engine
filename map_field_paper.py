@@ -3,7 +3,7 @@ import heapq
 
 PREPROCESSED_FILE = "./Data/preprocessed/result.json"
 MAPPING_FILE = "./Data/preprocessed/mapping.json"
-SEMANTIC_KEY = "semantic"
+MAPPING_KEY = "enhanced"
 TOP10_FILE = "./Data/preprocessed/top10.json"
 
 
@@ -16,7 +16,7 @@ def main():
 
     for k in result:
         v = result[k]
-        for key_phrase in v[SEMANTIC_KEY]:
+        for key_phrase in v[MAPPING_KEY]:
             if key_phrase not in mapping:
                 mapping[key_phrase] = [k]
             else:
@@ -38,6 +38,7 @@ def main():
     top10_material = dict()
 
     for k in top10_freq:
+        print(k)
         top10_material[k[1]] = mapping[k[1]]
 
     with open(TOP10_FILE, 'w') as fp:
