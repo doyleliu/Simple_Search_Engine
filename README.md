@@ -6,7 +6,7 @@ This is a basic search engine implemented in React.js and Node.js. The setup pro
     #### `npm install`
 2. Copy and paste paper documents (grobid_processed) into Data folder
 3. Index the documents
-    #### `node background/indexPaper.js`
+    #### `node --max-old-space-size=4096 background/indexPaper.js`
     ```
     8541 items parsed from data file
     Successfully indexed 8541 out of 8541 items
