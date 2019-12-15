@@ -3,6 +3,8 @@ import {Redirect} from 'react-router-dom';
 import MenavBar from '../components/navBar/navBar';
 import {Button} from 'react-bootstrap';
 import {Table} from 'antd';
+import {MDBInput} from "mdbreact";
+import Logo from './logo.jpg'
 import 'antd/dist/antd.css';
 
 class homePage extends React.Component {
@@ -335,21 +337,18 @@ class homePage extends React.Component {
                     <label>All Areas</label>
                     </div>
                 </fieldset>
-                <form>
-                    <label>
-                        ACL Paper Search:
-                        <li>Search for papers in the domain of natural language processing</li>
-                        <br></br>
-                        <input type="text" name="input" style={{width: "370px"}} onChange={this.handleChange}
-                               defaultValue=""/>
-                    </label>
 
-                    <input type="button" onClick={this.handleSubmit} value="Search"/>
-                </form>
+                <center>
+                    <img src={Logo}></img>
+                    <br></br> Search for papers in the domain of natural language processing
+                    <br></br>
+                    <MDBInput type="text" name="input" style={{width: "1000px"}} onChange={this.handleChange}
+                            defaultValue=""/>
+                    <Button onClick={this.handleSubmit} variant="light">Search</Button>
+                </center>
 
                 <div>
                     Current Results
-
                     <div className="container">
                         <Table dataSource={this.state.dataSource}
                                columns={this.state.Columns}
