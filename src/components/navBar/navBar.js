@@ -12,7 +12,7 @@ class MenavBar extends React.Component {
             <div className="navbar navbar-expand-lg fixed-top navbar-light bg-light">
 
             <div className="container">
-                <a href="/" className="navbar-brand">HomePage</a>
+                <a href="/" className="navbar-brand">Home Page</a>
 
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
             </div>

@@ -2,10 +2,13 @@ import React, {Component} from "react";
 import {Redirect} from 'react-router-dom';
 import MenavBar from '../components/navBar/navBar';
 import {Button} from 'react-bootstrap';
-import {Table} from 'antd';
 import {MDBInput} from "mdbreact";
 import Logo from './logo.jpg'
 import 'antd/dist/antd.css';
+import {Typography, Checkbox, Row, Col, Input, Table} from 'antd';
+
+const { Title } = Typography;
+const { Search } = Input;
 
 class homePage extends React.Component {
     constructor(props) {
@@ -33,6 +36,7 @@ class homePage extends React.Component {
                     title: 'Titles',
                     dataIndex: 'titles',
                     key: 'titles',
+                    render: text => <a>{text}</a>
                 },
                 {
                     title: 'Abstracts',
@@ -74,10 +78,11 @@ class homePage extends React.Component {
         if (e.target.name === "input") this.setState({query: e.target.value});
     }
 
-    handleSubmit() {
-        console.log("Hit button!");
+    handleSubmit(targete) {
+        console.log("Hit button!")
+        this.setState({query: targete});
         let data = {
-            query: this.state.query
+            query: targete
         };
 
         if(this.state.all_val === true)
@@ -300,60 +305,85 @@ class homePage extends React.Component {
                 <MenavBar></MenavBar>
                 <link rel="stylesheet" href="https://bootswatch.com/4/lumen/bootstrap.css" media="screen"></link>
                 <fieldset>
-                    <h4>Selected Areas</h4>
+                    <h5>Selected Areas</h5> 
                     <div className="checkbox">
-                    <input name="natural language processing" type="checkbox" defaultChecked={this.state.natural_language_processing} onChange={this.handleCheckbox} />
+                    <Checkbox name="all_val" type="checkbox" defaultChecked={this.state.all_val} onChange={this.handleCheckbox}/>
+                    <label><h5>All Areas</h5></label>
+                    </div>
+                    <Row>
+                    <Col span={6}>
+                    <div className="checkbox">
+                    <Checkbox name="natural language processing" type="checkbox" defaultChecked={this.state.natural_language_processing} onChange={this.handleCheckbox} />
                     <label>Natural Language Processing</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="computational linguistics" type="checkbox" defaultChecked={this.state.computational_linguistics} onChange={this.handleCheckbox}/>
+                    <Checkbox name="computational linguistics" type="checkbox" defaultChecked={this.state.computational_linguistics} onChange={this.handleCheckbox}/>
                     <label>Computational Linguistics</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="linguistics" type="checkbox" defaultChecked={this.state.linguistics} onChange={this.handleCheckbox}/>
+                    <Checkbox name="linguistics" type="checkbox" defaultChecked={this.state.linguistics} onChange={this.handleCheckbox}/>
                     <label>Linguistics</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="artificial intelligence" type="checkbox" defaultChecked={this.state.artificial_intelligence} onChange={this.handleCheckbox}/>
+                    <Checkbox name="artificial intelligence" type="checkbox" defaultChecked={this.state.artificial_intelligence} onChange={this.handleCheckbox}/>
                     <label>Artificial Intelligence</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="education" type="checkbox" defaultChecked={this.state.education} onChange={this.handleCheckbox}/>
+                    <Checkbox name="education" type="checkbox" defaultChecked={this.state.education} onChange={this.handleCheckbox}/>
                     <label>Education</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="mathematics" type="checkbox" defaultChecked={this.state.mathematics} onChange={this.handleCheckbox}/>
+                    <Checkbox name="mathematics" type="checkbox" defaultChecked={this.state.mathematics} onChange={this.handleCheckbox}/>
                     <label>Mathematics</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="translation" type="checkbox" defaultChecked={this.state.translation} onChange={this.handleCheckbox}/>
+                    <Checkbox name="translation" type="checkbox" defaultChecked={this.state.translation} onChange={this.handleCheckbox}/>
                     <label>Translation</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="formal languages" type="checkbox" defaultChecked={this.state.formal_languages} onChange={this.handleCheckbox}/>
+                    <Checkbox name="formal languages" type="checkbox" defaultChecked={this.state.formal_languages} onChange={this.handleCheckbox}/>
                     <label>Formal Languages</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="semantics" type="checkbox" defaultChecked={this.state.semantics} onChange={this.handleCheckbox}/>
+                    <Checkbox name="semantics" type="checkbox" defaultChecked={this.state.semantics} onChange={this.handleCheckbox}/>
                     <label>Semantics</label>
                     </div>
+                    </Col>
+                    <Col span={6}>
                     <div className="checkbox">
-                    <input name="data mining" type="checkbox" defaultChecked={this.state.data_mining} onChange={this.handleCheckbox}/>
+                    <Checkbox name="data mining" type="checkbox" defaultChecked={this.state.data_mining} onChange={this.handleCheckbox}/>
                     <label>Data Mining</label>
                     </div>
-                    <div className="checkbox">
-                    <input name="all_val" type="checkbox" defaultChecked={this.state.all_val} onChange={this.handleCheckbox}/>
-                    <label>All Areas</label>
-                    </div>
+                    </Col>
+                    </Row>
                 </fieldset>
 
                 <center>
                     <img src={Logo}></img>
-                    <br></br> Search for papers in the domain of natural language processing
+                    <Title level={4}>Search for papers in the domain of natural language processing</Title>
                     <br></br>
-                    <MDBInput type="text" name="input" style={{width: "1000px"}} onChange={this.handleChange}
-                            defaultValue=""/>
-                    <Button onClick={this.handleSubmit} variant="light">Search</Button>
+                    <Search
+                        placeholder="input search text"
+                        enterButton="Search"
+                        size="large"
+                        onSearch={this.handleSubmit}
+                    />
                 </center>
 
                 <div> 
