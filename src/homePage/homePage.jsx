@@ -299,8 +299,8 @@ class homePage extends React.Component {
             <div className='App'>
                 <MenavBar></MenavBar>
                 <link rel="stylesheet" href="https://bootswatch.com/4/lumen/bootstrap.css" media="screen"></link>
-                <fieldset>
-                    <h4>Selected Areas</h4>
+                <h4 onClick={e => this.toggleTopics(e)}>Selected Areas</h4>
+                <fieldset id={"top10topics"}>
                     <div className="checkbox">
                     <input name="natural language processing" type="checkbox" defaultChecked={this.state.natural_language_processing} onChange={this.handleCheckbox} />
                     <label>Natural Language Processing</label>
@@ -371,6 +371,16 @@ class homePage extends React.Component {
 
 
         )
+    }
+
+    toggleTopics(e) {
+        e.preventDefault();
+        let x = document.getElementById("top10topics");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
     }
 
     changeRelevance(e, currData) {
