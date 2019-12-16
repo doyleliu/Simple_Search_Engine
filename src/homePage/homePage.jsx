@@ -40,27 +40,28 @@ class homePage extends React.Component {
                     key: 'abstracts',
                 },
                 {
+                    title: 'Related Papers',
+                    dataIndex: 'MoreRelatedPaper',
+                    key: 'MoreRelatedPaper',
+                },
+                {
                     title: 'Relevance',
                     dataIndex: 'relevance',
                     key: 'relevance',
 
                 },
                 {
-                    title: 'RelevanceButton',
+                    title: 'Relevent',
                     dataIndex: 'relevanceButton',
                     key: 'relevanceButton',
 
                 },
                 {
-                    title: 'IrrelevanceButton',
+                    title: 'Irrelevant',
                     dataIndex: 'irrelevanceButton',
                     key: 'irrelevanceButton',
-                },
-                {
-                    title: 'MoreRelatedPaper',
-                    dataIndex: 'MoreRelatedPaper',
-                    key: 'MoreRelatedPaper',
                 }
+                
             ],
             dataSource: []
         };
@@ -79,7 +80,7 @@ class homePage extends React.Component {
             query: this.state.query
         };
 
-        if(this.state.all_val == true)
+        if(this.state.all_val === true)
         fetch(`/backend/queryPaper`, {
             method: 'POST',
             body: JSON.stringify(data),
@@ -116,15 +117,19 @@ class homePage extends React.Component {
                                 document_title: paper.titles,
                             };
                             paper.relevanceButton =
-                                <button onClick={e => this.changeRelevance(e, currData)}>Relevant</button>;
+                                <Button variant="light" onClick={e => this.changeRelevance(e, currData)}>Relevant</Button>;
                             paper.irrelevanceButton =
-                                <button onClick={e => this.changeIrrelevance(e, currData)}>Irrelevant</button>;
+                                <Button variant="light" onClick={e => this.changeIrrelevance(e, currData)}>Irrelevant</Button>;
                             let moreRelatedPaper = [];
                             let cnt = 1;
                             for (let ob of response) {
                                 moreRelatedPaper.push(" " + cnt + ". " + ob.titles + " ;");
                                 cnt ++;
                                 if(cnt > 5) break;
+                            }
+                            if(paper.abstracts.length > 500){
+                                paper.abstracts = paper.abstracts.slice(0,500);
+                                paper.abstracts += "...";
                             }
                             paper.MoreRelatedPaper = moreRelatedPaper;
                             global.constants.usersElements.push(paper);
@@ -193,15 +198,19 @@ class homePage extends React.Component {
                                     document_title: paper.titles,
                                 };
                                 paper.relevanceButton =
-                                    <button onClick={e => this.changeRelevance(e, currData)}>Relevant</button>;
+                                    <Button variant="light" onClick={e => this.changeRelevance(e, currData) }>Relevant</Button>;
                                 paper.irrelevanceButton =
-                                    <button onClick={e => this.changeIrrelevance(e, currData)}>Irrelevant</button>;
+                                    <Button variant="light" onClick={e => this.changeIrrelevance(e, currData)}>Irrelevant</Button>;
                                 let moreRelatedPaper = [];
                                 let cnt = 1;
                                 for (let ob of response) {
                                     moreRelatedPaper.push(" " + cnt + ". " + ob.titles + " ;");
                                     cnt ++;
                                     if(cnt > 5) break;
+                                }
+                                if(paper.abstracts.length > 500){
+                                    paper.abstracts = paper.abstracts.slice(0,500);
+                                    paper.abstracts += "...";
                                 }
                                 paper.MoreRelatedPaper = moreRelatedPaper;
                                 global.constants.usersElements.push(paper);
@@ -224,57 +233,57 @@ class homePage extends React.Component {
     }
 
     handleCheckbox(e) {
-        if(e.target.name == "natural language processing") {
+        if(e.target.name === "natural language processing") {
             this.setState({
                 natural_language_processing: !this.state.natural_language_processing,
             });
         }
-        if(e.target.name == "computational linguistics") {
+        if(e.target.name === "computational linguistics") {
             this.setState({
                 computational_linguistics: !this.state.computational_linguistics,
             });
         }
-        if(e.target.name == "linguistics") {
+        if(e.target.name === "linguistics") {
             this.setState({
                 linguistics: !this.state.linguistics,
             });
         }
-        if(e.target.name == "artificial intelligence") {
+        if(e.target.name === "artificial intelligence") {
             this.setState({
                 artificial_intelligence: !this.state.artificial_intelligence,
             });
         }
-        if(e.target.name == "education") {
+        if(e.target.name === "education") {
             this.setState({
                 education: !this.state.education,
             });
         }
-        if(e.target.name == "mathematics") {
+        if(e.target.name === "mathematics") {
             this.setState({
                 mathematics: !this.state.mathematics,
             });
         }
-        if(e.target.name == "translation") {
+        if(e.target.name === "translation") {
             this.setState({
                 translation: !this.state.translation,
             });
         }
-        if(e.target.name == "formal languages") {
+        if(e.target.name === "formal languages") {
             this.setState({
                 formal_languages: !this.state.formal_languages,
             });
         }
-        if(e.target.name == "semantics") {
+        if(e.target.name === "semantics") {
             this.setState({
                 semantics: !this.state.semantics,
             });
         }
-        if(e.target.name == "data mining") {
+        if(e.target.name === "data mining") {
             this.setState({
                 data_mining: !this.state.data_mining,
             });
         }
-        if(e.target.name == "all_val") {
+        if(e.target.name === "all_val") {
             this.setState({
                 all_val: !this.state.all_val,
             });
@@ -292,47 +301,47 @@ class homePage extends React.Component {
                 <link rel="stylesheet" href="https://bootswatch.com/4/lumen/bootstrap.css" media="screen"></link>
                 <fieldset>
                     <h4>Selected Areas</h4>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="natural language processing" type="checkbox" defaultChecked={this.state.natural_language_processing} onChange={this.handleCheckbox} />
                     <label>Natural Language Processing</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="computational linguistics" type="checkbox" defaultChecked={this.state.computational_linguistics} onChange={this.handleCheckbox}/>
                     <label>Computational Linguistics</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="linguistics" type="checkbox" defaultChecked={this.state.linguistics} onChange={this.handleCheckbox}/>
                     <label>Linguistics</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="artificial intelligence" type="checkbox" defaultChecked={this.state.artificial_intelligence} onChange={this.handleCheckbox}/>
                     <label>Artificial Intelligence</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="education" type="checkbox" defaultChecked={this.state.education} onChange={this.handleCheckbox}/>
                     <label>Education</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="mathematics" type="checkbox" defaultChecked={this.state.mathematics} onChange={this.handleCheckbox}/>
                     <label>Mathematics</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="translation" type="checkbox" defaultChecked={this.state.translation} onChange={this.handleCheckbox}/>
                     <label>Translation</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="formal languages" type="checkbox" defaultChecked={this.state.formal_languages} onChange={this.handleCheckbox}/>
                     <label>Formal Languages</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="semantics" type="checkbox" defaultChecked={this.state.semantics} onChange={this.handleCheckbox}/>
                     <label>Semantics</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="data mining" type="checkbox" defaultChecked={this.state.data_mining} onChange={this.handleCheckbox}/>
                     <label>Data Mining</label>
                     </div>
-                    <div class="checkbox">
+                    <div className="checkbox">
                     <input name="all_val" type="checkbox" defaultChecked={this.state.all_val} onChange={this.handleCheckbox}/>
                     <label>All Areas</label>
                     </div>
@@ -347,12 +356,14 @@ class homePage extends React.Component {
                     <Button onClick={this.handleSubmit} variant="light">Search</Button>
                 </center>
 
-                <div>
-                    Current Results
+                <div> 
                     <div className="container">
                         <Table dataSource={this.state.dataSource}
-                               columns={this.state.Columns}
-                               rowKey="number"/>
+                            columns={this.state.Columns}
+                            rowKey="number"
+                            size="small"
+                            bordered
+                            title={() => <center>Current Results</center>}/>
                     </div>
                 </div>
 
