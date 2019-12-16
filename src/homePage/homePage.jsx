@@ -4,6 +4,7 @@ import MenavBar from '../components/navBar/navBar';
 import {Button} from 'react-bootstrap';
 import {MDBInput} from "mdbreact";
 import Logo from './logo.jpg'
+import Icon from './down.png'
 import 'antd/dist/antd.css';
 import {Typography, Checkbox, Row, Col, Input, Table} from 'antd';
 
@@ -304,7 +305,11 @@ class homePage extends React.Component {
             <div className='App'>
                 <MenavBar></MenavBar>
                 <link rel="stylesheet" href="https://bootswatch.com/4/lumen/bootstrap.css" media="screen"></link>
-                <h4 onClick={e => this.toggleTopics(e)}>Selected Areas</h4>
+                <div>
+                    <h5 style={{display:"inline"}}>Selected Areas</h5><img src={Icon}
+                                                                           style={{width: "15px"}}
+                                                                           onClick={e => this.toggleTopics(e)}></img>
+                </div>
                 <fieldset id={"top10topics"}>
                     <div className="checkbox">
                     <Checkbox name="all_val" type="checkbox" defaultChecked={this.state.all_val} onChange={this.handleCheckbox}/>
