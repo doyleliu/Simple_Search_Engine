@@ -12,7 +12,7 @@
     "dialogflow-fulfillment": "^0.6.1",
     "dom-parser": "^0.1.6",
     "elasticsearch": "^16.4.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "filequeue": "^0.5.0",
     "http-errors": "latest",
     "mdbreact": "^4.23.1",
